@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,6 +48,20 @@ public class JobController {
 			return ResponseEntity.status(400).body(null);	// Return 400 Bad Request for validation errors
 		} catch (Exception e) {
 			return ResponseEntity.status(500).body(null);	// Return 500 Internal Server Error for unexpected issues
+		}
+	}
+	
+	@DeleteMapping("/{jobId}/recruiter/{recruiterId}")
+	public ResponseEntity<String> deleteJob( @PathVariable int jobId, @PathVariable int recruiterId) {
+		try {
+			jobService.deleteJob(jobId, recruiterId);
+			return ResponseEntity.ok("Job deleted successfully");
+		}
+		catch (IllegalArgumentException e) {
+			return ResponseEntity.status(403).body(e.getMessage());	// 403 Forbidden
+		}
+		catch (Exception e) {
+			return ResponseEntity.status(500).body("An unexpected error occurred");
 		}
 	}
 }

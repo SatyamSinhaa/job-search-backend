@@ -45,7 +45,6 @@ public class UserController {
                    .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable int id) {
 		try {
@@ -63,5 +62,4 @@ public class UserController {
 			return ResponseEntity.status(500).body("Internal server error: " + e.getMessage());
 		}
 	}
-
 }

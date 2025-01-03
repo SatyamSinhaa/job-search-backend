@@ -64,32 +64,13 @@ public class JobService {
 		return job;
 	}
 
-//	public Job applyJob(int userId, int jobId) {
-//	    // Check if the user exists and has the correct role
-//	    User user = userRepository.findById(userId)
-//	            .orElseThrow(() -> new IllegalArgumentException("User not found"));
-//
-//	    if (user.getRole() != Role.APPLICANT) {
-//	        throw new IllegalArgumentException("Only applicants can apply for jobs");
-//	    }
-//
-//	    // Check if the job exists
-//	    Job job = jobRepository.findById(jobId)
-//	            .orElseThrow(() -> new IllegalArgumentException("Job not found"));
-//
-//	    // Check if the user has already applied for the job
-//	    if (job.getApplicants().contains(user)) {
-//	        throw new IllegalArgumentException("User has already applied for this job");
-//	    }
-//
-//	    // Add the user to the job's applicants list and sync the bidirectional relationship
-//	    job.getApplicants().add(user);
-//	    user.getJobsApplied().add(job);
-//
-//	    // Save both sides to ensure consistency
-//	    jobRepository.save(job);
-//	    userRepository.save(user);
-//
-//	    return job;
-//	}
+	public void deleteJob(int jobId, int recruiterId) {
+		int rowsAffected = jobRepository.deleteJob(jobId, recruiterId);
+
+		if (rowsAffected == 0) {
+			throw new IllegalArgumentException("you are not authorized to delete this job");
+		}
+
+	}
+
 }
