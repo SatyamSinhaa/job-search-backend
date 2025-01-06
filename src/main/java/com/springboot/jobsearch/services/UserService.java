@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.jobsearch.dto.UserDTO;
 import com.springboot.jobsearch.dto.UserRegister;
 import com.springboot.jobsearch.entity.Role;
 import com.springboot.jobsearch.entity.User;
@@ -44,6 +45,23 @@ public class UserService {
 		}
 		// Return false if the user was not found
 		return false;
+	}
+
+	public UserDTO updateUser(int userId, UserDTO userDTO) {
+		User existingUser = userRepository.findById(userId).orElseThrow(()-> new IllegalArgumentException("user not found"));
+		
+		if (userDTO.getName() != null && !userDTO.getName().isEmpty()) {
+	        existingUser.setName(userDTO.getName());
+	    }
+	    if (userDTO.getEmail() != null && !userDTO.getEmail().isEmpty()) {
+	        existingUser.setEmail(userDTO.getEmail());
+	    }
+	    if (userDTO.getRole() != null && !userDTO.getRole().isEmpty()) {
+	        existingUser.setRole(Role.valueOf(userDTO.getRole()));
+	    }
+		
+		User updatedUser = userRepository.save(existingUser);
+		return new UserDTO(updatedUser);
 	}
 
 }
