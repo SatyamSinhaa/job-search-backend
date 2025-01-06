@@ -3,6 +3,7 @@ package com.springboot.jobsearch.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.jobsearch.dto.JobDTO;
 import com.springboot.jobsearch.dto.JobRegister;
 import com.springboot.jobsearch.entity.Job;
 import com.springboot.jobsearch.entity.Role;
@@ -71,6 +72,26 @@ public class JobService {
 			throw new IllegalArgumentException("you are not authorized to delete this job");
 		}
 
+	}
+
+	public JobDTO updateJob(int jobId, int recruiterId, JobDTO jobDTO) {
+		Job existingJob = jobRepository.findById(jobId).orElseThrow(()-> new IllegalArgumentException("job not found"));
+		
+		if (existingJob.getPostedBy() == null || existingJob.getPostedBy().getId() != recruiterId) {
+            throw new IllegalArgumentException("Only the recruiter who posted this job can update it");
+        }
+		
+		if(jobDTO.getTitle() != null && !jobDTO.getTitle().isEmpty()) {
+			existingJob.setTitle(jobDTO.getTitle());
+		}
+		if(jobDTO.getDescription() != null && !jobDTO.getDescription().isEmpty()) {
+			existingJob.setDescription(jobDTO.getDescription());
+		}
+		if(jobDTO.getLocation() != null && !jobDTO.getLocation().isEmpty()) {
+			existingJob.setLocation(jobDTO.getLocation());
+		}
+		Job updatedJob = jobRepository.save(existingJob);
+		return new JobDTO(updatedJob);
 	}
 
 }
