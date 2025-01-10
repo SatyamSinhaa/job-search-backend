@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.jobsearch.dto.LoginDTO;
 import com.springboot.jobsearch.dto.UserDTO;
 import com.springboot.jobsearch.dto.UserRegister;
 import com.springboot.jobsearch.entity.Role;
@@ -26,6 +27,16 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@PostMapping("/login/{email}/{password}")
+	public ResponseEntity<LoginDTO> login(@PathVariable String email, @PathVariable String password) {
+		try {
+			LoginDTO response = userService.login(email, password);
+			return ResponseEntity.ok(response);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(401).body(null);
+		}
+	}
+	
 	@PostMapping
 	public ResponseEntity<?> registerUser(@RequestBody UserRegister userRegister) {
 		try {

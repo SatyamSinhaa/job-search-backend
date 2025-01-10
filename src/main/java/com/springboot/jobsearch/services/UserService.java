@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.jobsearch.dto.LoginDTO;
 import com.springboot.jobsearch.dto.UserDTO;
 import com.springboot.jobsearch.dto.UserRegister;
 import com.springboot.jobsearch.entity.Role;
@@ -62,6 +63,14 @@ public class UserService {
 		
 		User updatedUser = userRepository.save(existingUser);
 		return new UserDTO(updatedUser);
+	}
+	
+	public LoginDTO login(String email, String password) {
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found with this email"));
+		if (!user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+		return new LoginDTO(user.getId(), user.getName(), user.getEmail(), user.getRole().name());
 	}
 
 }
