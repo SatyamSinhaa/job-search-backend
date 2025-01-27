@@ -32,13 +32,17 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
     private String password;
+    private String qualification;
+    private int experience;
+    private String profileSummary;
+    private List<String> skills;
 
     @Enumerated(EnumType.STRING)
     private Role role; // APPLICANT or RECRUITER
 
     
     @OneToMany(mappedBy = "postedBy", cascade = CascadeType.ALL)
-//    @JsonIgnore
+    @JsonIgnore
     private List<Job> jobsPosted; // Jobs posted by the recruiter
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -47,7 +51,7 @@ public class User {
         joinColumns = @JoinColumn(name = "applicant_id"),
         inverseJoinColumns = @JoinColumn(name = "job_id")
     )
-//    @JsonIgnore
+    @JsonIgnore
     private List<Job> jobsApplied; // Jobs the applicant has applied for
     
     public User(String name, String email, String password, Role role) {
@@ -56,7 +60,17 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", jobsPostedCount=" + (jobsPosted != null ? jobsPosted.size() : 0) + // Show count instead of full list
+                ", jobsAppliedCount=" + (jobsApplied != null ? jobsApplied.size() : 0) + // Show count instead of full list
+                '}';
+    }
+
 }
-
-
-

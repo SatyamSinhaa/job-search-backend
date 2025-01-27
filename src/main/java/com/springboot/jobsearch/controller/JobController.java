@@ -1,5 +1,6 @@
 package com.springboot.jobsearch.controller;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import com.springboot.jobsearch.dto.JobDTO;
 import com.springboot.jobsearch.dto.JobRegister;
 import com.springboot.jobsearch.entity.Job;
 import com.springboot.jobsearch.entity.User;
+import com.springboot.jobsearch.repository.JobRepository;
 import com.springboot.jobsearch.services.JobService;
 import com.springboot.jobsearch.services.UserService;
 
@@ -76,4 +78,14 @@ public class JobController {
 			return ResponseEntity.status(500).body(null); // Internal error
 		}
 	}
+	
+	@GetMapping("/{display}")
+    public ResponseEntity<List<JobDTO>> fetchAllJobs() {
+        try {
+            List<JobDTO> jobs = jobService.fetchAllJobs();
+            return ResponseEntity.ok(jobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null); // Internal Server Error
+        }
+    }
 }

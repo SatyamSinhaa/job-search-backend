@@ -2,6 +2,7 @@ package com.springboot.jobsearch.dto;
 
 import lombok.Data;
 
+@Data
 public class LoginDTO {
 	private int userId;
     private String name;

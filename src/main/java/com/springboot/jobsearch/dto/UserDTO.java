@@ -25,7 +25,7 @@ public class UserDTO {
 	        // If the user is an applicant, populate jobsApplied
 	        if (user.getRole() == Role.APPLICANT) {
 	            this.jobsApplied = user.getJobsApplied().stream()
-	                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getDescription(), job.getLocation()))
+	                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getCompany(), job.getExperience(), job.getSalary(), job.getLocation(), job.getDescription(), job.getTags()))
 	                .collect(Collectors.toList());
 	        } else {
 	            this.jobsApplied = null;  // No jobs applied if the user is a recruiter
@@ -34,7 +34,7 @@ public class UserDTO {
 	        // If the user is a recruiter, populate jobsPosted
 	        if (user.getRole() == Role.RECRUITER) {
 	            this.jobsPosted = user.getJobsPosted().stream()
-	                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getDescription(), job.getLocation()))
+	                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getCompany(), job.getExperience(), job.getSalary(), job.getLocation(), job.getDescription(), job.getTags()))
 	                .collect(Collectors.toList());
 	        } else {
 	            this.jobsPosted = null;  // No jobs posted if the user is an applicant

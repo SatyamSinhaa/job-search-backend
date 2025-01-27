@@ -1,5 +1,8 @@
 package com.springboot.jobsearch.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +37,7 @@ public class JobService {
 		if (recruiter.getRole() != Role.RECRUITER) {
 			throw new IllegalArgumentException("Only recruiters can post jobs");
 		}
-		Job job = new Job(jobRegister.getTitle(), jobRegister.getDescription(), jobRegister.getLocation(), recruiter);
+		Job job = new Job(jobRegister.getTitle(), jobRegister.getCompany(), jobRegister.getExperience(), jobRegister.getSalary(), jobRegister.getLocation(), jobRegister.getDescription(), jobRegister.getTags(), recruiter);
 		System.out.println(job);
 		return jobRepository.save(job);
 	}
@@ -93,5 +96,12 @@ public class JobService {
 		Job updatedJob = jobRepository.save(existingJob);
 		return new JobDTO(updatedJob);
 	}
+
+	public List<JobDTO> fetchAllJobs() {
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream()
+                .map(job -> new JobDTO(job.getId(), job.getTitle(), job.getCompany(), job.getExperience(), job.getSalary(), job.getLocation(), job.getDescription(), job.getTags()))
+                .collect(Collectors.toList());
+    }
 
 }
